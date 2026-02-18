@@ -13,7 +13,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav nav-underline nav-fill w-100">
         <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" aria-current="page" routerLink="/" data-bs-toggle="collapse"
-            data-bs-target=".navbar-collapse.show">Home</a>
+            data-bs-target=".navbar-collapse.show" [routerLinkActiveOptions]="{exact: true}">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" aria-current="page" routerLink="/skis" data-bs-toggle="collapse"
@@ -28,7 +28,7 @@
   </div>
 </header>
 <!-- Main content of the page -->
-<section style="min-height: 100vh;">
+<section style="min-height: 100vh;" class="container py-4">
   <router-outlet></router-outlet>
 </section>
 <!-- Footer -->
