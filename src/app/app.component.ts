@@ -1,12 +1,17 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from "@angular/router";
+
+type NavLink = {
+  label: string;
+  href: string;
+  disabled?: boolean;
+};
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'StevensPass-SmartTech';
 }
