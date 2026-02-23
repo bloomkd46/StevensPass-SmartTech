@@ -90,6 +90,18 @@ export class SkisComponent {
         }
       }
     });
+    effect(() => {
+      const shoeTypeTouched = this.skierForm.shoeType().touched();
+      if (!shoeTypeTouched) {
+        const shoeSize = Number(this.skierForm.shoeSize().value());
+        if (shoeSize && shoeSize >= 8 && shoeSize <= 13.5) {
+          const age = Number(this.skierForm.age().value());
+          if (age <= 10) {
+            this.skierForm.shoeType().value.set(ShoeType.Youth);
+          }
+        }
+      }
+    });
   }
 
   resetForm() {
