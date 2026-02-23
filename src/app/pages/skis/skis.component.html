@@ -5,58 +5,70 @@
       <h2>Skier Information:</h2>
       <form>
         <div class="g-3">
-          <div>
+          <div class="mb-2">
             <label for="age" class="form-label">Age</label>
             <div class="input-group has-validation">
-              <select class="form-select is-invalid" id="age-select" aria-describedby="ageFeedback" [formField]="skierForm.age"> @for (age
-                of ageOptions; track $index) { <option [value]="age">{{ age }}</option> } </select>
-              <input type="number" class="form-control is-invalid " id="age" [formField]="skierForm.age">
-              <div id="ageFeedback" class="invalid-feedback"> Please provide a valid age. </div>
+              <select class="form-select" [class.is-invalid]="skierForm.age().invalid()" id="age-select" aria-describedby="ageFeedback"
+                [formField]="skierForm.age"> @for (age of ageOptions; track $index) { <option [value]="age">
+                  {{ age }}
+                </option> } </select>
+              <input type="number" class="form-control" [class.is-invalid]="skierForm.age().invalid()" id="age" [formField]="skierForm.age">
+              <div id="ageFeedback" class="invalid-feedback"> @for (error of skierForm.age().errors(); track $index) { <p class="my-0">
+                  {{ error.message }}
+                </p> } </div>
             </div>
           </div>
-          <div>
+          <div class="mb-2">
             <label for="min-height" class="form-label">Height</label>
             <div class="input-group has-validation">
-              <select class="form-select is-invalid" id="min-height" aria-describedby="heightFeedback" [formField]="skierForm.minHeight">
-                @for (height of minHeightOptions(); track $index) { <option [value]="height">{{ height }}</option> } </select>
+              <select class="form-select" [class.is-invalid]="skierForm.minHeight().invalid()" id="min-height"
+                aria-describedby="heightFeedback" [formField]="skierForm.minHeight"> @for (height of minHeightOptions(); track $index) {
+                <option [value]="height">{{ height }}</option> } </select>
               <span class="input-group-text" id="inputGroupPrepend3">-</span>
-              <select class="form-select is-invalid" id="max-height" aria-describedby="heightFeedback" [formField]="skierForm.maxHeight">
-                @for (height of maxHeightOptions(); track $index) { <option [value]="height">{{ height }}</option> } </select>
-              <div id="heightFeedback" class="invalid-feedback"> Please choose a valid height range. </div>
+              <select class="form-select" [class.is-invalid]="skierForm.maxHeight().invalid()" id="max-height"
+                aria-describedby="heightFeedback" [formField]="skierForm.maxHeight"> @for (height of maxHeightOptions(); track $index) {
+                <option [value]="height">{{ height }}</option> } </select>
+              <div id="heightFeedback" class="invalid-feedback"> @for (error of [...skierForm.minHeight().errors(),
+                ...skierForm.maxHeight().errors()]; track $index) {<p class="my-0">{{ error.message }}</p> } </div>
             </div>
-            <div>
-            </div>
-            <div>
+            <div class="mb-2">
               <label for="weight" class="form-label">Weight</label>
-              <select class="form-select is-invalid" id="weight" aria-describedby="weightFeedback" [formField]="skierForm.weightRange"> @for
-                (weightRange of weightRanges; track $index) { <option [value]="weightRange">{{ weightRange }}lbs</option> } </select>
-              <div id="weightFeedback" class="invalid-feedback"> Please select a valid weight. </div>
+              <select class="form-select" [class.is-invalid]="skierForm.weightRange().invalid()" id="weight"
+                aria-describedby="weightFeedback" [formField]="skierForm.weightRange"> @for (weightRange of weightRanges; track $index) {
+                <option [value]="weightRange">{{ weightRange }}lbs</option> } </select>
+              <div id="weightFeedback" class="invalid-feedback"> @for (error of skierForm.weightRange().errors(); track $index) { <p
+                  class="my-0">{{ error.message }}</p> } </div>
             </div>
           </div>
-          <div>
+          <div class="mb-2">
             <label for="shoe-size" class="form-label">Shoe Size</label>
             <div class="input-group has-validation">
-              <select class="form-select is-invalid" id="shoe-size-select" aria-describedby="shoeSizeFeedback"
-                [formField]="skierForm.shoeSize"> @for (shoeSize of shoeSizes(); track $index) { <option [value]="shoeSize">{{ shoeSize }}
+              <select class="form-select" [class.is-invalid]="skierForm.shoeSize().invalid()" id="shoe-size-select"
+                aria-describedby="shoeSizeFeedback" [formField]="skierForm.shoeSize"> @for (shoeSize of shoeSizes(); track $index) { <option
+                  [value]="shoeSize">{{ shoeSize }}
                 </option> } </select>
-              <input type="number" class="form-control is-invalid " id="shoe-size" [formField]="skierForm.shoeSize">
-              <select class="form-select is-invalid" id="shoe-size-select" aria-describedby="shoeSizeFeedback"
-                [formField]="skierForm.shoeType">
+              <input type="number" class="form-control" [class.is-invalid]="skierForm.shoeSize().invalid()" id="shoe-size"
+                [formField]="skierForm.shoeSize">
+              <select class="form-select" [class.is-invalid]="skierForm.shoeType().invalid()" id="shoe-size-select"
+                aria-describedby="shoeSizeFeedback" [formField]="skierForm.shoeType">
                 <option value="mens">Mens</option>
                 <option value="womens">Womens</option>
                 <option value="youth">Youth</option>
               </select>
-              <div id="shoeSizeFeedback" class="invalid-feedback"> Please provide a valid shoe size. </div>
+              <div id="shoeSizeFeedback" class="invalid-feedback"> @for (error of [...skierForm.shoeSize().errors(),
+                ...skierForm.shoeType().errors()]; track $index) { <p class="my-0">{{ error.message }}</p> } </div>
             </div>
           </div>
-          <div>
+          <div class="mb-2">
             <label for="skier-code" class="form-label">Skier Code</label>
-            <select class="form-select is-invalid" id="skier-code" aria-describedby="skierCodeFeedback" [formField]="skierForm.skierCode">
+            <select class="form-select" [class.is-invalid]="skierForm.skierCode().invalid()" id="skier-code"
+              aria-describedby="skierCodeFeedback" [formField]="skierForm.skierCode">
               <option value="1">Type 1</option>
               <option value="2">Type 2</option>
               <option value="3">Type 3</option>
             </select>
-            <div id="skierCodeFeedback" class="invalid-feedback"> Please select a valid skier code. </div>
+            <div id="skierCodeFeedback" class="invalid-feedback"> @for (error of skierForm.skierCode().errors(); track $index) { <p
+                class="my-0">{{ error.message }}</p> } </div>
           </div>
         </div>
         <div class="mt-3">
@@ -71,25 +83,25 @@
           <div class="mb-2">
             <label for="age" class="form-label h3">Boots:</label>
             <div class="input-group has-validation">
-              <div class="form-floating" [class.is-invalid]="bootSize().errMsg">
-                <input type="text" class="form-control" [class.is-invalid]="bootSize().errMsg" id="bootSize" disabled
-                  [value]="bootSize().value">
+              <div class="form-floating" [class.is-invalid]="bootSize().errMsg" [class.is-valid]="bootSize().value">
+                <input type="text" class="form-control" [class.is-invalid]="bootSize().errMsg" [class.is-valid]="bootSize().value"
+                  id="bootSize" disabled [value]="bootSize().value">
                 <label for="bootSize">Boot Size</label>
               </div>
               <div class="form-floating">
-                <input type="text" class="form-control" [class.is-invalid]="bootSize().errMsg" id="bootLength" disabled
-                  [value]="bootLength() ? bootLength() + 'mm' : ''">
+                <input type="text" class="form-control" [class.is-invalid]="bootSize().errMsg" [class.is-valid]="bootSize().value"
+                  id="bootLength" disabled [value]="bootLength() ? bootLength() + 'mm' : ''">
                 <label for="bootLength">Boot Length</label>
               </div>
               <div id="bootsFeedback" class="invalid-feedback">
                 {{ bootSize().errMsg }}
               </div>
-            </div>
-            <div id="bootsFeedback" class="text-warning">
-              {{ bootSize().adjustments }}
+              <div id="bootsFeedback" class="valid-feedback">
+                {{ bootSize().adjustments }}
+              </div>
             </div>
           </div>
-          <div>
+          <div class="mb-2">
             <label for="age" class="form-label h3">Skis:</label>
             <div class="text-start ms-5"> @for (length of skiLengths(); track $index) { <div class="form-check">
                 <input type="radio" class="form-check-input" [class.is-valid]="length.recommended" id="validationFormCheck3"
@@ -101,18 +113,23 @@
                 <label class="form-check-label" for="validationFormCheck3">Height required </label>
               </div> } </div>
           </div>
-          <div>
+          <div class="mb-2">
             <label for="age" class="form-label h3">Dims:</label>
             <div class="input-group has-validation">
-              <div class="form-floating" [class.is-invalid]="dims().errMsg">
-                <input type="text" class="form-control" [class.is-invalid]="dims().errMsg" id="bootSize" disabled [value]="dims().code">
+              <div class="form-floating" [class.is-invalid]="dims().errMsg" [class.is-valid]="dims().value">
+                <input type="text" class="form-control" [class.is-invalid]="dims().errMsg" [class.is-valid]="dims().value" id="bootSize"
+                  disabled [value]="dims().code">
                 <label for="bootSize">Code</label>
               </div>
-              <div class="form-floating" [class.is-invalid]="dims().errMsg">
-                <input type="text" class="form-control" [class.is-invalid]="dims().errMsg" id="bootLength" disabled [value]="dims().value">
+              <div class="form-floating" [class.is-invalid]="dims().errMsg" [class.is-valid]="dims().value">
+                <input type="text" class="form-control" [class.is-invalid]="dims().errMsg" [class.is-valid]="dims().value" id="bootLength"
+                  disabled [value]="dims().value">
                 <label for="bootLength">Value</label>
               </div>
               <div id="bootsFeedback" class="invalid-feedback"> {{ dims().errMsg }} </div>
+              <div id="bootsFeedback" class="valid-feedback"> @for (adjustment of dims().adjustments; track $index) {<p class="my-0">
+                  {{ adjustment }}
+                </p> } </div>
             </div>
           </div>
         </div>

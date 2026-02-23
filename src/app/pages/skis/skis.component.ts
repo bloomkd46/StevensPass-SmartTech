@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
-import { form, FormField } from '@angular/forms/signals';
+import { form, FormField, max, min, required } from '@angular/forms/signals';
 import { ConversionService } from '../../services/conversion/conversion.service';
 import { ShoeType } from '../../services/conversion/conversions/boot-size';
 
@@ -22,7 +22,19 @@ export class SkisComponent {
     skierCode: '1',
   };
   private skierModel = signal(this.initialSkierModel);
-  public skierForm = form(this.skierModel);
+  public skierForm = form(this.skierModel, (schemaPath) => {
+    required(schemaPath.age, { message: 'Age is required to calculate dims' });
+    min(schemaPath.age, 3, { message: 'Minimum ski school age is 3' });
+    max(schemaPath.age, 14, { message: 'Maximum ski school age is 14 (support for older skiers is expirimental)' });
+
+    required(schemaPath.minHeight, { message: 'Minimum height is required to calculate ski length options' });
+    required(schemaPath.maxHeight, { message: 'Maximum height is required to calculate ski length options' });
+
+    required(schemaPath.weightRange, { message: 'Weight range is required to calculate dims' });
+    required(schemaPath.shoeSize, { message: 'Shoe size is required to calculate boot size and dims' });
+    required(schemaPath.shoeType, { message: 'Shoe type is required to calculate boot size and dims' });
+    required(schemaPath.skierCode, { message: 'Skier code is required to calculate dims' });
+  });
 
   public ageOptions = Array.from({ length: 12 }, (_, i) => i + 3); // Generates ages from 3 to 14
 
@@ -71,6 +83,7 @@ export class SkisComponent {
 
   resetForm() {
     this.skierModel.set(this.initialSkierModel);
+    this.skierForm().reset();
   }
 
   public bootSize = computed<{ value: number | null, errMsg?: string, adjustments?: string; }>(() => {
@@ -117,7 +130,7 @@ export class SkisComponent {
     return null;
   });
 
-  public dims = computed<{ code: string | null, value: number | null, errMsg?: string; }>(() => {
+  public dims = computed<{ code: string | null, value: number | null, errMsg?: string, adjustments?: string[]; }>(() => {
     const weightRange = this.skierForm.weightRange().value();
     const bootLength = this.bootLength();
     const age = this.skierForm.age().value();
@@ -136,22 +149,25 @@ export class SkisComponent {
     if (!dimCode || !dimSubCode) {
       return { errMsg: `No dim code found for the given weight and boot length`, value: null, code: null };
     }
+    const adjustments: string[] = [];
     if (parseInt(age) >= 50 || parseInt(age) < 10) {
       dimCode = this.conversionService.dimCode.adjustCode(dimCode, -1);
+      adjustments.push('Dim code adjusted for age');
     }
     if (!dimCode) {
       return { errMsg: `No dim code found after adjusting for age`, value: null, code: null };
     }
     if (skierCode !== '1') {
       dimCode = this.conversionService.dimCode.adjustCode(dimCode, parseInt(skierCode) - 1);
+      adjustments.push(`Dim code adjusted for skier code ${skierCode}`);
     }
     if (!dimCode) {
-      return { errMsg: `No dim code found after adjusting for skier code`, value: null, code: null };
+      return { errMsg: `No dim code found after adjusting for skier code`, value: null, code: null, adjustments };
     }
     const dimValue = this.conversionService.dimValue.fromCodes(dimCode, dimSubCode.toString());
     if (!dimValue) {
-      return { errMsg: `No dim value found for the dim code `, code: dimCode + dimSubCode, value: null };
+      return { errMsg: `No dim value found for the dim code `, code: dimCode + dimSubCode, value: null, adjustments };
     }
-    return { code: dimCode + dimSubCode, value: dimValue };
+    return { code: dimCode + dimSubCode, value: dimValue, adjustments };
   });
 }
