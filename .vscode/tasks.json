@@ -4,13 +4,49 @@
   "tasks": [
     {
       "type": "npm",
+      "script": "deploy"
+    },
+    {
+      "type": "npm",
+      "script": "serve:ssr",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": false,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "Node Express server listening on"
+          }
+        }
+      }
+    },
+    {
+      "label": "Deploy",
+      "dependsOn": [
+        "npm: deploy",
+        "npm: serve:ssr"
+      ],
+      "dependsOrder": "sequence"
+    },
+    {
+      "label": "terminate: serve:ssr",
+      "command": "echo ${input:serve-ssr}", // the 'start' command that's defined in the inputs list
+      "type": "shell",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
       "script": "start",
       "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",
         "pattern": "$tsc",
         "background": {
-          "activeOnStart": true,
+          "activeOnStart": false,
           "beginsPattern": {
             "regexp": "(.*?)"
           },
@@ -21,22 +57,24 @@
       }
     },
     {
-      "type": "npm",
-      "script": "test",
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "(.*?)"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation complete"
-          }
-        }
-      }
+      "label": "terminate: start",
+      "command": "echo ${input:start}", // the 'start' command that's defined in the inputs list
+      "type": "shell",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "start",
+      "type": "command",
+      "command": "workbench.action.tasks.terminate",
+      "args": "npm: start" // the name of the task to be terminated when the 'start' command is executed.
+    },
+    {
+      "id": "serve-ssr",
+      "type": "command",
+      "command": "workbench.action.tasks.terminate",
+      "args": "npm: serve:ssr" // the name of the task to be terminated when the 'start' command is executed.
     }
   ]
 }

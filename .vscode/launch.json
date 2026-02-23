@@ -3,18 +3,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ng serve",
-      "type": "chrome",
+      "name": "Serve",
+      "type": "msedge",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "postDebugTask": "terminate: start",
+      "url": "http://localhost:4200/",
+      "timeout": 100000
     },
     {
-      "name": "ng test",
-      "type": "chrome",
+      "name": "Serve:SSR",
+      "type": "msedge",
       "request": "launch",
-      "preLaunchTask": "npm: test",
-      "url": "http://localhost:9876/debug.html"
+      "preLaunchTask": "Deploy",
+      "postDebugTask": "terminate: serve:ssr",
+      "url": "http://localhost:4000/",
+      "timeout": 100000
     }
   ]
 }
