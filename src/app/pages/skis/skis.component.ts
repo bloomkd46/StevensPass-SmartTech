@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
-import { form, FormField, max, min, required, validate } from '@angular/forms/signals';
+import { form, FormField, max, min, required, validate, type FieldTree } from '@angular/forms/signals';
+import { metrics, Span, startInactiveSpan } from '@sentry/angular';
 import { ConversionService } from '../../services/conversion/conversion.service';
 import { ShoeType } from '../../services/conversion/conversions/boot-size';
 
@@ -71,6 +72,13 @@ export class SkisComponent {
     return untracked(() => this.conversionService.getShoeSizes(shoeType)); // Ensure this computed property updates when shoeType is touched
   }); // Computed property for shoe sizes
 
+  private formComplete = computed(() => {
+    const skierFormValue = this.skierForm;
+    return Object.keys(this.initialSkierModel).every(key => {
+      const field = skierFormValue[key as keyof typeof skierFormValue] as FieldTree<string, string>;
+      return !!field().value();
+    });
+  });
   constructor() {
     effect(() => {
       const maxHeightTouched = this.skierForm.maxHeight().touched();
@@ -102,11 +110,34 @@ export class SkisComponent {
         }
       }
     });
+
+    let inputDurationSpan: Span | undefined;
+    let startTime: number | undefined;
+    effect(() => {
+      const touched = this.skierForm().touched();
+      const formCompleted = this.formComplete();
+      if (touched && !inputDurationSpan) {
+        inputDurationSpan = startInactiveSpan({ op: 'skis', name: 'inputDuration' });
+        startTime = Date.now();
+        metrics.count('skis_form_started', 1);
+        return;
+      }
+      if (formCompleted && inputDurationSpan) {
+        inputDurationSpan.end();
+        if (startTime !== undefined) {
+          const duration = Date.now() - startTime;
+          metrics.distribution('skis_form_input_duration', duration, { unit: 'milliseconds' });
+        }
+        inputDurationSpan = undefined;
+        metrics.count('skis_form_completed', 1);
+      }
+    });
   }
 
   resetForm() {
     this.skierModel.set(this.initialSkierModel);
     this.skierForm().reset();
+    metrics.count('skis_form_reset', 1);
   }
 
   public bootSize = computed<{ value: number | null, errMsg?: string, adjustments?: string; }>(() => {
