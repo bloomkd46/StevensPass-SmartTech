@@ -120,13 +120,33 @@ export class SkisComponent {
   public dims = computed<{ code: string | null, value: number | null, errMsg?: string; }>(() => {
     const weightRange = this.skierForm.weightRange().value();
     const bootLength = this.bootLength();
+    const age = this.skierForm.age().value();
+    const skierCode = this.skierForm.skierCode().value();
     if (!weightRange || !bootLength) {
       return { errMsg: 'Weight and boot length required', value: null, code: null };
     }
-    const dimCode = this.conversionService.dimCode.fromWeightRange(weightRange);
+    if (!age) {
+      return { errMsg: 'Age required', value: null, code: null };
+    }
+    if (!skierCode) {
+      return { errMsg: 'Skier code required', value: null, code: null };
+    }
+    let dimCode = this.conversionService.dimCode.fromWeightRange(weightRange);
     const dimSubCode = this.conversionService.dimSubCode.fromBootLength(bootLength.toString());
     if (!dimCode || !dimSubCode) {
       return { errMsg: `No dim code found for the given weight and boot length`, value: null, code: null };
+    }
+    if (parseInt(age) >= 50 || parseInt(age) < 10) {
+      dimCode = this.conversionService.dimCode.adjustCode(dimCode, -1);
+    }
+    if (!dimCode) {
+      return { errMsg: `No dim code found after adjusting for age`, value: null, code: null };
+    }
+    if (skierCode !== '1') {
+      dimCode = this.conversionService.dimCode.adjustCode(dimCode, parseInt(skierCode) - 1);
+    }
+    if (!dimCode) {
+      return { errMsg: `No dim code found after adjusting for skier code`, value: null, code: null };
     }
     const dimValue = this.conversionService.dimValue.fromCodes(dimCode, dimSubCode.toString());
     if (!dimValue) {
