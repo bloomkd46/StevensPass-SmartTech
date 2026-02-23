@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
-import { form, FormField, max, min, required } from '@angular/forms/signals';
+import { form, FormField, max, min, required, validate } from '@angular/forms/signals';
 import { ConversionService } from '../../services/conversion/conversion.service';
 import { ShoeType } from '../../services/conversion/conversions/boot-size';
 
@@ -25,7 +25,7 @@ export class SkisComponent {
   public skierForm = form(this.skierModel, (schemaPath) => {
     required(schemaPath.age, { message: 'Age is required to calculate dims' });
     min(schemaPath.age, 3, { message: 'Minimum ski school age is 3' });
-    max(schemaPath.age, 14, { message: 'Maximum ski school age is 14 (support for older skiers is expirimental)' });
+    max(schemaPath.age, 14, { message: 'Maximum ski school age is 14 (support for older skiers is experimental)' });
 
     required(schemaPath.minHeight, { message: 'Minimum height is required to calculate ski length options' });
     required(schemaPath.maxHeight, { message: 'Maximum height is required to calculate ski length options' });
@@ -33,6 +33,17 @@ export class SkisComponent {
     required(schemaPath.weightRange, { message: 'Weight range is required to calculate dims' });
     required(schemaPath.shoeSize, { message: 'Shoe size is required to calculate boot size and dims' });
     required(schemaPath.shoeType, { message: 'Shoe type is required to calculate boot size and dims' });
+    validate(schemaPath.shoeSize, ({ value }) => {
+      const shoeType = this.skierForm.shoeType().value();
+      if (!value || !shoeType) {
+        return null; // Let the required validators handle this case
+      }
+      if (!this.shoeSizes().includes(value())) {
+        return { kind: 'invalid', message: `Invalid ${shoeType} shoe size.` };
+      }
+      return null;
+
+    });
     required(schemaPath.skierCode, { message: 'Skier code is required to calculate dims' });
   });
 
@@ -115,14 +126,25 @@ export class SkisComponent {
     return null;
   });
 
-  public skiLengths = computed<{ value: number | null, recommended?: boolean; }[] | null>(() => {
+  public skiLengths = computed<{ value: number | null, recommended?: string; }[] | null>(() => {
     const maxHeight = this.skierForm.maxHeight().value();
     const minHeight = this.skierForm.minHeight().value();
 
     if (maxHeight && minHeight) {
       const lengthOptions = this.conversionService.skiLength.fromHeightRange(minHeight, maxHeight);
       if (lengthOptions?.length) {
-        return lengthOptions.map(length => ({ value: length, recommended: false }));
+        const lengths = lengthOptions.map<{ value: number | null, recommended?: string; }>(length => ({ value: length }));
+        if (this.skierForm.skierCode().value() !== '1') {
+          lengths[lengths.length - 1].recommended = 'Recommended based off of skier type'; // Recommend the longest ski for more advanced skiers
+        } else {
+          const dimCode = this.dims().code;
+          const dimPercentile = this.conversionService.dimValue.getPercentile(dimCode || '');
+          if (dimPercentile !== null) {
+            const recommendedIndex = Math.round(dimPercentile * (lengths.length - 1));
+            lengths[recommendedIndex].recommended = 'Recommended based off of the dim settings';
+          }
+        }
+        return lengths;
       } else {
         return null;
       }

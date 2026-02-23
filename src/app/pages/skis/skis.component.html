@@ -107,7 +107,7 @@
                 <input type="radio" class="form-check-input" [class.is-valid]="length.recommended" id="validationFormCheck3"
                   name="radio-stacked" [checked]="length.recommended">
                 <label class="form-check-label" for="validationFormCheck3">{{length.value}}</label>
-                <div class="valid-feedback">Recommended based off of the dim settings</div>
+                <div class="valid-feedback my-0">{{length.recommended}}</div>
               </div> } @if(!skiLengths()?.length){<div class="form-check">
                 <input type="radio" class="form-check-input is-invalid" id="validationFormCheck3" name="radio-stacked" required>
                 <label class="form-check-label" for="validationFormCheck3">Height required </label>
