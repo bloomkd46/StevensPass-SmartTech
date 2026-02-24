@@ -156,7 +156,7 @@ jobs:
         set_commits: 'manual'
         commit: ${{ github.sha }}
         previous_commit: ${{ github.event.before }}
-        repo: StevensPass/SmartTech
+        repo: ${{ github.repository }}
 
 
   notify_changes:
