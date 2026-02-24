@@ -99,6 +99,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload Sentry Sourcemaps
+        run: yarn sentry:sourcemaps
+
+
       - name: Upload website
         uses: actions/upload-artifact@v4
         with:
@@ -135,9 +139,6 @@ jobs:
       with:
         name: website
         path: ./dist/stevens-pass-smart-tech/browser
-
-    - name: Upload Sentry Sourcemaps
-      run: yarn sentry:sourcemaps
 
     - name: Deploy to Firebase
       run: |
