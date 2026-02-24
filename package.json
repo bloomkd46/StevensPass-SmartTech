@@ -51,6 +51,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "semver": "^7.7.4",
     "simple-git": "^3.32.2",
+    "ts-node": "^10.9.2",
     "typescript": "~5.9.3",
     "yarn": "^1.22.22"
   }
