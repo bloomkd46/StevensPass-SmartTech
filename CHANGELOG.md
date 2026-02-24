@@ -1,3 +1,6 @@
+## 1.0.4
+* Configured a color theme color
+
 ## 1.0.3
 * Added favicons
 
