@@ -179,14 +179,14 @@ export class SkisComponent {
         const lengths = lengthOptions.map<{ value: number | null, recommended?: string; }>(length => ({ value: length }));
         if (this.skierForm.skierCode().value() !== '1') {
           lengths[lengths.length - 1].recommended = 'Recommended based off of skier type'; // Recommend the longest ski for more advanced skiers
-        } else {
+        }/* else {
           const dimCode = this.dims().code;
           const dimPercentile = this.conversionService.dimValue.getPercentile(dimCode || '');
           if (dimPercentile !== null) {
-            const recommendedIndex = Math.round(dimPercentile * (lengths.length - 1));
+            const recommendedIndex = lengths.length - Math.round(dimPercentile * lengths.length - 0.25);
             lengths[recommendedIndex].recommended = 'Recommended based off of the dim settings';
           }
-        }
+        }*/
         return lengths;
       } else {
         return null;
