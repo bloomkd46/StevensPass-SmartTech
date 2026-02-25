@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { form, FormField, max, min, required, validate, type FieldTree } from '@angular/forms/signals';
+import { RouterLink } from "@angular/router";
 import { metrics, Span, startInactiveSpan } from '@sentry/angular';
 import { ConversionService } from '../../services/conversion/conversion.service';
 import { ShoeType } from '../../services/conversion/conversions/boot-size';
 
 @Component({
   selector: 'app-skis',
-  imports: [FormField],
+  imports: [FormField, RouterLink],
   templateUrl: './skis.component.html',
   styleUrl: './skis.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -194,6 +195,8 @@ export class SkisComponent {
     }
     return null;
   });
+
+  public releaseAccepted = signal(false);
 
   public dims = computed<{ code: string | null, value: number | null, errMsg?: string, adjustments?: string[]; }>(() => {
     const weightRange = this.skierForm.weightRange().value();
