@@ -1,8 +1,6 @@
 import { isDevMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { browserTracingIntegration, feedbackIntegration, init, replayIntegration } from '@sentry/angular';
-import { getAnalytics } from "firebase/analytics";
-import { initializeApp } from "firebase/app";
 import { AppComponent } from './app/app.component';
 import { appConfig } from './app/app.config';
 
@@ -52,23 +50,5 @@ init({
   beforeSend: event => development ? null : event
 });
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAik-xTp_Wpbf7qL70Hh__A_4LBT8z7cuY",
-  authDomain: "stevenspass-smarttech.firebaseapp.com",
-  projectId: "stevenspass-smarttech",
-  storageBucket: "stevenspass-smarttech.firebasestorage.app",
-  messagingSenderId: "203127262310",
-  appId: "1:203127262310:web:b0b1cd7c8f968ede3f31a7",
-  measurementId: "G-QZCZ4BPBWS"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));
