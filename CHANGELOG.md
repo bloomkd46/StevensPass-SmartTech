@@ -1,3 +1,9 @@
+## 1.1.0
+* Added a footer with copyright and links to terms and privacy pages.
+* Updated terms and conditions to include a liability disclaimer.
+* (Temporarily) removed ski length recommendation based on dim settings for beginner skiers, as it is not yet reliable
+* Added liability acceptance checkbox to ski tech page to ensure users acknowledge the liability disclaimer in the terms and conditions.
+
 ## 1.0.4
 * Configured a color theme color
 
