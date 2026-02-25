@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { form, FormField, max, min, required, validate, type FieldTree } from '@angular/forms/signals';
+import { RouterLink } from "@angular/router";
 import { metrics, Span, startInactiveSpan } from '@sentry/angular';
 import { ConversionService } from '../../services/conversion/conversion.service';
 import { ShoeType } from '../../services/conversion/conversions/boot-size';
 
 @Component({
   selector: 'app-skis',
-  imports: [FormField],
+  imports: [FormField, RouterLink],
   templateUrl: './skis.component.html',
   styleUrl: './skis.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -179,14 +180,14 @@ export class SkisComponent {
         const lengths = lengthOptions.map<{ value: number | null, recommended?: string; }>(length => ({ value: length }));
         if (this.skierForm.skierCode().value() !== '1') {
           lengths[lengths.length - 1].recommended = 'Recommended based off of skier type'; // Recommend the longest ski for more advanced skiers
-        } else {
+        }/* else {
           const dimCode = this.dims().code;
           const dimPercentile = this.conversionService.dimValue.getPercentile(dimCode || '');
           if (dimPercentile !== null) {
-            const recommendedIndex = Math.round(dimPercentile * (lengths.length - 1));
+            const recommendedIndex = lengths.length - Math.round(dimPercentile * lengths.length - 0.25);
             lengths[recommendedIndex].recommended = 'Recommended based off of the dim settings';
           }
-        }
+        }*/
         return lengths;
       } else {
         return null;
@@ -194,6 +195,8 @@ export class SkisComponent {
     }
     return null;
   });
+
+  public releaseAccepted = signal(false);
 
   public dims = computed<{ code: string | null, value: number | null, errMsg?: string, adjustments?: string[]; }>(() => {
     const weightRange = this.skierForm.weightRange().value();
