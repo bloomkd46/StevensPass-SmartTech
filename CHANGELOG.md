@@ -1,3 +1,7 @@
+## 1.1.1
+* Improved reset button
+  * The input fields now empty instead of resetting to their lowest value
+
 ## 1.1.0
 * Added a footer with copyright and links to terms and privacy pages.
 * Updated terms and conditions to include a liability disclaimer.
