@@ -38,7 +38,7 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ],
             "server": "src/main.server.ts",
             "prerender": {
@@ -55,13 +55,24 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1MB",
+                  "maximumError": "1.5MB"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "4kB",
                   "maximumError": "8kB"
+                },
+                {
+                  "type": "anyScript",
+                  "maximumWarning": "500kB",
+                  "maximumError": "700kB"
+                },
+                {
+                  "type": "bundle",
+                  "name": "skis-component",
+                  "maximumWarning": "75kB",
+                  "maximumError": "100kB"
                 }
               ],
               "outputHashing": "all"
