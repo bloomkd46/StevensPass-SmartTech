@@ -9,7 +9,7 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "public, s-maxage=31536000, max-age=0"
+            "value": "public, s-maxage=31536000, max-age=3600, stale-while-revalidate=25000"
           },
           {
             "key": "Content-Security-Policy",
