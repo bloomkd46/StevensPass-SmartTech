@@ -75,18 +75,18 @@
           <button class="btn btn-danger" type="button" (click)="resetForm()">Reset</button>
         </div>
       </form>
-      <div class="mt-3 text-start">
+    </div>
+    <div class="col">
+      <h2>Tech Values:</h2>
+      <div class="my-3 text-center">
         <div class="form-check">
           <input class="form-check-input" [class.is-invalid]="!releaseAccepted()" type="checkbox" id="invalidCheck3"
             aria-describedby="invalidCheck3Feedback" required (change)="releaseAccepted.set($event.target.checked)">
           <label class="form-check-label" for="invalidCheck3"> I agree to the <a routerLink="/terms">terms and conditions</a> and <a
               routerLink="/privacy">privacy policy</a> </label>
-          <div id="invalidCheck3Feedback" class="invalid-feedback"> You must agree to view tech values. </div>
+          <!--<div id="invalidCheck3Feedback" class="invalid-feedback"> You must agree to view tech values. </div>-->
         </div>
-      </div>
-    </div>
-    <div class="col">
-      <h2>Tech Values:</h2> @if (releaseAccepted()) { <form>
+      </div> @if (releaseAccepted()) { <form>
         <div class="g-3">
           <div class="mb-2">
             <label for="age" class="form-label h3">Boots:</label>
