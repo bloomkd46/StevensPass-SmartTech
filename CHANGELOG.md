@@ -1,3 +1,6 @@
+## 1.1.3
+* Updated cache control headers so that the website only needs to be loaded once per shift for techs
+
 ## 1.1.2
 * Moved terms of service acknowledgment to tech values section to ensure users see it before accepting liability.
 
