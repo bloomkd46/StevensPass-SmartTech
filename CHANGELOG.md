@@ -1,3 +1,6 @@
+## 1.1.2
+* Moved terms of service acknowledgment to tech values section to ensure users see it before accepting liability.
+
 ## 1.1.1
 * Improved reset button
   * The input fields now empty instead of resetting to their lowest value
