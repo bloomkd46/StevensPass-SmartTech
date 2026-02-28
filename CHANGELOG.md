@@ -1,3 +1,6 @@
+## 1.1.4
+* Fixed height conversion (added missing 117 length and fixed 127)
+
 ## 1.1.3
 * Updated cache control headers so that the website only needs to be loaded once per shift for techs
 
